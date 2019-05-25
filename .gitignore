@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+/Class01/.vs
+/Class01/Debug
+Debug
+/glad
+/glfw-3.3
