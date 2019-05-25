@@ -36,3 +36,4 @@ Debug
 /glad
 /glfw-3.3
 .vs
+*.user
