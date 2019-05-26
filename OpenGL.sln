@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Class03 Shader", "Class03 S
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Class01 Window", "Class01 Window\Class01.vcxproj", "{40524AC2-642B-4101-9F5C-359118950DD6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Class03 Textures", "Class03 Textures\Class03 Textures.vcxproj", "{81963904-7EC0-4E37-85F3-E7B28502E1F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{40524AC2-642B-4101-9F5C-359118950DD6}.Release|x64.Build.0 = Release|x64
 		{40524AC2-642B-4101-9F5C-359118950DD6}.Release|x86.ActiveCfg = Release|Win32
 		{40524AC2-642B-4101-9F5C-359118950DD6}.Release|x86.Build.0 = Release|Win32
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Debug|x64.ActiveCfg = Debug|x64
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Debug|x64.Build.0 = Debug|x64
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Debug|x86.ActiveCfg = Debug|Win32
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Debug|x86.Build.0 = Debug|Win32
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Release|x64.ActiveCfg = Release|x64
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Release|x64.Build.0 = Release|x64
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Release|x86.ActiveCfg = Release|Win32
+		{81963904-7EC0-4E37-85F3-E7B28502E1F8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

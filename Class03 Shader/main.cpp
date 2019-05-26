@@ -540,13 +540,13 @@ void ShaderByClass(unsigned int& shaderProgram, unsigned int& VAO, unsigned int&
 
 	shader.user();
 
-	// 顶点缓冲对象引用		
+	
 
 	glGenVertexArrays(1, &VAO);
 
 	glBindVertexArray(VAO);
 
-
+	// 顶点缓冲对象引用		
 
 	glGenBuffers(1, &VBO);
 
