@@ -1,0 +1,25 @@
+﻿  glad.c
+  main.cpp
+d:\github\opengl\class21  mesh\main.cpp(233): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(235): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(279): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(280): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(284): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(285): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(287): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(288): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\github\opengl\class21  mesh\main.cpp(295): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  Mesh.cpp
+d:\github\opengl\class21  mesh\mesh.cpp(21): warning C4244: “参数”: 从“unsigned int”转换到“float”，可能丢失数据
+  Model.cpp
+d:\github\opengl\class21  mesh\model.cpp(39): warning C4018: “<”: 有符号/无符号不匹配
+d:\github\opengl\class21  mesh\model.cpp(46): warning C4018: “<”: 有符号/无符号不匹配
+d:\github\opengl\class21  mesh\model.cpp(60): warning C4018: “<”: 有符号/无符号不匹配
+d:\github\opengl\class21  mesh\model.cpp(85): warning C4018: “<”: 有符号/无符号不匹配
+d:\github\opengl\class21  mesh\model.cpp(89): warning C4018: “<”: 有符号/无符号不匹配
+d:\github\opengl\class21  mesh\model.cpp(116): warning C4018: “<”: 有符号/无符号不匹配
+  Shader.cpp
+MSVCRT.lib(initializers.obj) : warning LNK4098: 默认库“msvcrtd.lib”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
+msvcrtd.lib(_init_.obj) : error LNK2001: 无法解析的外部符号 __CrtDbgReport
+msvcrtd.lib(_init_.obj) : error LNK2001: 无法解析的外部符号 __CrtDbgReportW
+D:\Github\OpenGL\Release\Class21  Mesh.exe : fatal error LNK1120: 2 个无法解析的外部命令
