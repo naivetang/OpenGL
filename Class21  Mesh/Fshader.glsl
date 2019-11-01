@@ -3,13 +3,14 @@
 struct Material
 {
 	// 漫反射  贴图
-	sampler2D diffuse;
+	sampler2D texture_diffuse1;
 
 	// 镜面反射
 	//vec3 specular;
 
 	// 镜面反射 贴图 越白的地方镜面反射越强、越暗的地方镜面反射越弱
-	sampler2D specular;
+	//sampler2D specular;
+	sampler2D texture_specular1;
 
 	// 反光度
 	float shininess;
@@ -123,7 +124,7 @@ void main()
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
 	// 环境光
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
 
 
 
@@ -135,7 +136,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 	float cossAngle = max( dot(normalize( normal), lightDir ), 0.0);
 
 	// 漫反射光
-	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.diffuse, TexCoords));
+	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.texture_diffuse1, TexCoords));
 
 
 
@@ -151,7 +152,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 	
 	float spec = pow( max(dot(normalize(viewDir), normalize(reflectDir)), 0.0) , material.shininess );
 
-	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+	vec3 specular = light.specular * spec * vec3(texture(material.texture_specular1, TexCoords));
 
 	return (ambient + diffuse + specular);
 }
@@ -160,7 +161,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {	
 
 	// 环境光
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
 	
 	// 光线单位向量
 	vec3 DirNor = normalize(light.position - fragPos);		
@@ -171,7 +172,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float cossAngle = max( dot(normalize( normal), DirNor), 0.0);
 
 	// 漫反射光
-	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.diffuse, TexCoords));
+	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.texture_diffuse1, TexCoords));
 
 	// 镜面光照（高光）
 	//vec3 viewDir = normalize(viewPose - fragPos);
@@ -185,7 +186,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 	float spec = pow( max(dot(normalize(viewDir), normalize(reflectDir)), 0.0) , material.shininess );
 
 	// 反射光
-	vec3 specular = spec * light.specular * vec3(texture(material.specular, TexCoords));
+	vec3 specular = spec * light.specular * vec3(texture(material.texture_specular1, TexCoords));
 
 	// 片段距离点光源的位置
 	float dis = distance(light.position, fragPos);
@@ -198,7 +199,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 vec3 CalcSpotLight(SpotLight light, vec3 normal,vec3 fragPos,vec3 viewDir)
 {
 		// 环境光
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1, TexCoords));
 	
 	// 光线单位向量
 	vec3 DirNor = normalize(-light.direction);	
@@ -207,7 +208,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal,vec3 fragPos,vec3 viewDir)
 	float cossAngle = max( dot(normalize( normal), DirNor), 0.0);
 
 	// 漫反射光
-	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.diffuse, TexCoords));
+	vec3 diffuse = light.diffuse * cossAngle * vec3 ( texture(material.texture_diffuse1, TexCoords));
 
 	// 镜面光照（高光）
 	//vec3 viewDir = normalize(viewPose - fragPos);
@@ -221,7 +222,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal,vec3 fragPos,vec3 viewDir)
 	float spec = pow( max(dot(normalize(viewDir), normalize(reflectDir)), 0.0) , material.shininess );
 
 	// 反射光
-	vec3 specular = spec * light.specular * vec3(texture(material.specular, TexCoords));
+	vec3 specular = spec * light.specular * vec3(texture(material.texture_specular1, TexCoords));
 	
 
 	// 聚光源

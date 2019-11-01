@@ -87,13 +87,15 @@ int main()
 
 	mat4 model, view, projection;
 
+	Shader ourShader("ModelVShader.glsl", "ModelFShader.glsl");
+
 	Shader lightingShader("Vshader.glsl", "Fshader.glsl");
 
 	Shader lampShader("Vshader.glsl", "LightShader.glsl");
 
 	vec3 dirLightPos = vec3(0.2f, 2.0f, 0.0f);
 
-	vec3 dirLightDir = vec3(-0.2f, -1.0f, -0.3f);
+	vec3 dirLightDir = vec3(0, 1, 0);
 
 	vec3 spotLightPos = vec3(0.0f, 0.0f, -5.0f);
 
@@ -108,34 +110,7 @@ int main()
 
 	model = mat4(1);
 
-	// model = rotate(model, radians(-30.0f), vec3(1, 0, 0));
-	//
-	// model = rotate(model, radians(-30.0f), vec3(0, 0, 1));
-
-	// 上一章的效果：
-	// lightingShader.setVec3("material.ambient", 0.1, 0.1, 0.1);
-	// lightingShader.setVec3("material.diffuse", 1.0, 1.0, 1.0);
-	// lightingShader.setVec3("material.specular", 1.0, 1, 1);
-	// lightingShader.setFloat("material.shininess", 32);
-
-	//lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-	//lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-
-
-	lightingShader.setInt("material.diffuse", 0);
-	//lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-	lightingShader.setInt("material.specular", 1);
 	lightingShader.setFloat("material.shininess", 32);
-
-	// lightingShader.setVec3("light.ambient", 0.2, 0.2, 0.2);
-	// lightingShader.setVec3("light.diffuse", 0.5, 0.5, 0.5);
-	// lightingShader.setVec3("light.specular", 1, 1, 1);
-	// lightingShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
-	//
-	//
-	// lightingShader.setFloat("light.constant", 1.0f);
-	// lightingShader.setFloat("light.linear", 0.09f);
-	// lightingShader.setFloat("light.quadratic", 0.032f);
 
 	lampShader.user();
 
@@ -145,14 +120,118 @@ int main()
 
 	model = scale(model, vec3(0.2f));
 
-	// model = rotate(model, radians(-30.0f), vec3(1, 0, 0));
-	//
-	// model = rotate(model, radians(-30.0f), vec3(0, 0, 1));
+
 
 	lampShader.setMat4("model", model);
 
 
-	Model Model("Model/nanosuit.obj");
+	Model ourModel("D:/Github/OpenGL/Class21  Mesh/Model/nanosuit.obj");
+
+	// 立方体顶点数据
+	float vertices[] = {
+		// positions          // normals           // texture coords
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+	};
+
+	glm::vec3 cubePositions[] = {
+glm::vec3(0.0f,  0.0f,  0.0f),
+glm::vec3(2.0f,  5.0f, -15.0f),
+glm::vec3(-1.5f, -2.2f, -2.5f),
+glm::vec3(-3.8f, -2.0f, -12.3f),
+glm::vec3(2.4f, -0.4f, -3.5f),
+glm::vec3(-1.7f,  3.0f, -7.5f),
+glm::vec3(1.3f, -2.0f, -2.5f),
+glm::vec3(1.5f,  2.0f, -2.5f),
+glm::vec3(1.5f,  0.2f, -1.5f),
+glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+	// 点光源位置数据
+	glm::vec3 pointLightPositions[] = {
+	glm::vec3(0.7f,  0.2f,  2.0f),
+	glm::vec3(2.3f, -3.3f, -4.0f),
+	glm::vec3(-4.0f,  2.0f, -12.0f),
+	glm::vec3(0.0f,  0.0f, -3.0f)
+	};
+
+
+
+	// Cube的顶点数据
+	unsigned int VBO, cubeVAO;
+	glGenVertexArrays(1, &cubeVAO);
+	glBindVertexArray(cubeVAO);
+
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// texture coords attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	// Light的顶点数据
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+
+	// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glEnable(GL_DEPTH_TEST);
 
 	// render loop
 	// -----------
@@ -168,9 +247,39 @@ int main()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// ourShader.user();
+		//
+		// // view/projection transformations
+		// glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		// glm::mat4 view = camera.GetViewMatrix();
+		// ourShader.setMat4("projection", projection);
+		// ourShader.setMat4("view", view);
+		//
+		// // render the loaded model
+		// glm::mat4 model = glm::mat4(1.0f);
+		// model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		// model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		// ourShader.setMat4("model", model);
+		// ourModel.Draw(ourShader);
+		//
+		//
+		// // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+		// // -------------------------------------------------------------------------------
+		// glfwSwapBuffers(window);
+		// glfwPollEvents();
+		
+		//continue;
+
 		
 
 		lightingShader.user();
+
+		model = mat4(1);
+
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		
+		lightingShader.setMat4("model", model);
 
 		projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 1.0f, 100.0f);
 
@@ -209,9 +318,114 @@ int main()
 		// lightingShader.setVec3("light.ambient", ambientColor.x, ambientColor.y, ambientColor.z);
 		// lightingShader.setVec3("light.diffuse", diffuseColor.x, diffuseColor.y, diffuseColor.z);
 		//
-		Model.Draw(lightingShader);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			model = mat4(1);
+
+			// 设置定向光源
+
+			lightingShader.setVec3("dirLight.direction", dirLightDir);
+			lightingShader.setVec3("dirLight.ambient", 0.2, 0.2, 0.2);
+			lightingShader.setVec3("dirLight.diffuse", 0.5, 0.5, 0.5);
+			lightingShader.setVec3("dirLight.specular", 1, 1, 1);
+
+			// 设置点光源
+
+			for (int i = 0; i < 4; i++)
+			{
+				std::string str = "pointLights[";
+				str += std::to_string(i);
+				str += "]";
+
+				lightingShader.setVec3(str + ".position", pointLightPositions[i]);
+				lightingShader.setVec3(str + ".ambient", 0.2, 0.2, 0.2);
+				lightingShader.setVec3(str + ".diffuse", 0.5, 0.5, 0.5);
+				lightingShader.setVec3(str + ".specular", 1, 1, 1);
+
+				lightingShader.setFloat(str + ".constant", 1.0f);
+				lightingShader.setFloat(str + ".linear", 0.09f);
+				lightingShader.setFloat(str + ".quadratic", 0.032f);
+			}
+
+			// 设置聚光源
+
+			lightingShader.setVec3("spotLight.position", spotLightPos);
+
+			lightingShader.setVec3("spotLight.direction", spotLightDir);
+			lightingShader.setFloat("spotLight.inCutOff", cos(12.5f));
+			lightingShader.setFloat("spotLight.outerCutOff", cos(17.5f));
 
 
+			lightingShader.setVec3("spotLight.ambient", 0.2, 0.2, 0.2);
+			lightingShader.setVec3("spotLight.diffuse", 0.5, 0.5, 0.5);
+			lightingShader.setVec3("spotLight.specular", 1, 1, 1);
+
+		}
+		ourModel.Draw(lightingShader);
+
+		// 绘制光源
+
+		// 绘制 定向光源
+
+		// 白色
+
+		lampShader.user();
+
+		model = mat4(1.0f);
+
+		model = translate(model, dirLightPos);
+
+		model = scale(model, vec3(0.5f));
+
+		lampShader.setMat4("model", model);
+
+		lampShader.setMat4("projection", projection);
+
+		lampShader.setMat4("view", view);
+
+		lampShader.setVec3("color", 1, 1, 1);
+
+		glBindVertexArray(lightVAO);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// 绘制 点光源		
+
+		// 绿色
+
+		for (int i = 0; i < 4; i++)
+		{
+			model = mat4(1);
+
+			model = translate(model, pointLightPositions[i]);
+
+			model = scale(model, vec3(0.2f));
+
+			lampShader.setMat4("model", model);
+
+			lampShader.setVec3("color", 0, 1, 0);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		// 绘制聚光源
+
+		// 红色
+
+		model = mat4(1);
+
+		model = translate(model, spotLightPos);
+
+		model = scale(model, vec3(0.1f));
+
+		lampShader.setMat4("model", model);
+
+		lampShader.setVec3("color", 1, 0, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		 glfwSwapBuffers(window);
+		 glfwPollEvents();
 	}
 
 
