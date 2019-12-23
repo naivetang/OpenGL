@@ -30,14 +30,27 @@ void Model::loadModel(string path)
 void Model::processNode(aiNode* node, const aiScene* scene)
 {
 	
+	//
+	// for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	// {
+	// 	// the node object only contains indices to index the actual objects in the scene. 
+	// 	// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
+	// 	aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+	// 	meshes.push_back(processMesh(mesh, scene));
+	// }
+	//
+	// for (unsigned int i = 0; i < node->mNumChildren; i++)
+	// {
+	// 	processNode(node->mChildren[i], scene);
+	// }
 
-	for (int i = 0; i < node->mNumChildren; i++)
-		processNode(node->mChildren[i], scene);
+	 for (int i = 0; i < node->mNumChildren; i++)
+	 	processNode(node->mChildren[i], scene);
 
 	if (node->mMeshes == nullptr)
 	{
 		cout << "mesh is null , name : " << node->mName.C_Str() << endl;
-		return;
+		//return;
 	}
 	else
 	{

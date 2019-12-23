@@ -69,5 +69,14 @@
     <None Include="InstanceVShader.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="ModelVShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ModelFShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ModelGShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

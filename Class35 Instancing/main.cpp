@@ -148,11 +148,13 @@ int main()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)) );
 	glEnableVertexAttribArray(1);
 
+	
+
 	vec2 offsets[100];
 
 	int index = 0;
 
-	float offset = 0.1f;
+	float offset1 = 0.1f;
 
 	for(int y = -10; y < 10; y +=2)
 	{
@@ -160,28 +162,83 @@ int main()
 		{
 			vec2 t;
 
-			t.x = (float)x / 10.0f + offset;
+			t.x = (float)x / 10.0f + offset1;
 
-			t.y = (float)y / 10.0f + offset;
+			t.y = (float)y / 10.0f + offset1;
 
 			offsets[index++] = t;
 		}
 	}
 
-
 	Shader InstanceShader("InstanceVShader.glsl", "InstanceFShader.glsl");
 
 	InstanceShader.user();
 
-	for (unsigned int i = 0; i < 100; i++)
-	{
-		stringstream ss;
-		string index;
-		ss << i;
-		index = ss.str();
-		InstanceShader.setVec2(("offect[" + index + "]").c_str(), offsets[i]);
-	}
+	// for (unsigned int i = 0; i < 100; i++)
+	// {
+	// 	stringstream ss;
+	// 	string index;
+	// 	ss << i;
+	// 	index = ss.str();
+	// 	InstanceShader.setVec2(("offect[" + index + "]").c_str(), offsets[i]);
+	// }
 
+
+	unsigned int instanceVBO;
+	glGenBuffers(1, &instanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec2) * 100, &offsets[0], GL_STATIC_DRAW);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(2);
+
+	/*这个函数告诉了OpenGL该什么时候更新顶点属性的内容至新一组数据。
+	 *它的第一个参数是需要的顶点属性，第二个参数是属性除数(Attribute Divisor)。
+	 *默认情况下，属性除数是0，告诉OpenGL我们需要在顶点着色器的每次迭代时更新顶点属性。
+	 *将它设置为1时，我们告诉OpenGL我们希望在渲染一个新实例的时候更新顶点属性。
+	 *而设置为2时，我们希望每2个实例更新一次属性，
+	 *以此类推。我们将属性除数设置为1，是在告诉OpenGL，处于位置值2的顶点属性是一个实例化数组。*/
+	glVertexAttribDivisor(2, 1);
+
+
+	//TODO::行星
+	unsigned int amount = 100;
+	mat4 * modelMatrices = new mat4[amount];
+	srand(glfwGetTime());
+	float radius = 50.0f;
+	float offset = 2.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		glm::mat4 model;
+		// 1. 位移：分布在半径为 'radius' 的圆形上，偏移的范围是 [-offset, offset]
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float y = displacement * 0.4f; // 让行星带的高度比x和z的宽度要小
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float z = cos(angle) * radius + displacement;
+		model = glm::translate(model, glm::vec3(x, y, z));
+
+		// 2. 缩放：在 0.05 和 0.25f 之间缩放
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		model = glm::scale(model, glm::vec3(scale));
+
+		// 3. 旋转：绕着一个（半）随机选择的旋转轴向量进行随机的旋转
+		float rotAngle = (rand() % 360);
+		model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+		// 4. 添加到矩阵的数组中
+		modelMatrices[i] = model;
+	}	
+
+	Model rock("D:/Github/OpenGL/Class35 Instancing/Rock/rock.obj");
+
+	Model planet("D:/Github/OpenGL/Class35 Instancing/Planet/planet.obj");
+
+	Shader shader("ModelVShader.glsl","ModelFShader.glsl");
+
+	glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -189,16 +246,35 @@ int main()
 		
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		//float time = glfwGetTime();
-		
+		processInput(window);
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// 绘制行星
+		shader.user();
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+		glm::mat4 view = camera.GetViewMatrix();;
+		glm::mat4 model;
+		model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
+		shader.setMat4("model", model);
+		planet.Draw(shader);
 
-		glBindVertexArray(quadVAO);
+		// 绘制小行星
+		for (unsigned int i = 0; i < amount; i++)
+		{
+			shader.setMat4("model", modelMatrices[i]);
+			rock.Draw(shader);
+		}
 
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
+
+		//glBindVertexArray(quadVAO);
+
+		//glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
 		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		
 		glfwSwapBuffers(window);
