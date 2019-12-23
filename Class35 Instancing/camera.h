@@ -24,7 +24,7 @@ const float YAW = -90.0f;
 // иооб ╦╘яЖ
 const float PITCH = 0.0f;
 
-const float SPEED = 2.5f;
+const float SPEED = 10.0f;
 
 const float SENSITIVITY = 0.1f;
 

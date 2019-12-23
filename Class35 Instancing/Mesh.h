@@ -42,7 +42,7 @@ public:
 	void Draw(Shader shader);
 
 
-private:
+public:
 
 	unsigned int VAO, VBO, EBO;
 

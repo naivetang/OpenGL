@@ -26,7 +26,7 @@ public:
 		loadModel(path);
 	}
 	void Draw(Shader shader);
-private:
+public:
 
 	map<string, Texture> textures_loaded;
 

@@ -202,7 +202,7 @@ int main()
 
 
 	//TODO::行星
-	unsigned int amount = 100;
+	unsigned int amount = 100000;
 	mat4 * modelMatrices = new mat4[amount];
 	srand(glfwGetTime());
 	float radius = 50.0f;
@@ -230,13 +230,51 @@ int main()
 
 		// 4. 添加到矩阵的数组中
 		modelMatrices[i] = model;
-	}	
+	}
 
 	Model rock("D:/Github/OpenGL/Class35 Instancing/Rock/rock.obj");
 
 	Model planet("D:/Github/OpenGL/Class35 Instancing/Planet/planet.obj");
 
-	Shader shader("ModelVShader.glsl","ModelFShader.glsl");
+	Shader rockShader("InstanceModelVShader.glsl", "ModelFShader.glsl");
+	Shader planetShader("ModelVShader.glsl", "ModelFShader.glsl");
+
+	// 顶点缓冲对象
+	unsigned int buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+
+	for (unsigned int i = 0; i < rock.meshes.size(); i++)
+	{
+		unsigned int VAO = rock.meshes[i].VAO;
+		glBindVertexArray(VAO);
+		// 顶点属性
+		GLsizei vec4Size = sizeof(glm::vec4);
+
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(vec4Size));
+
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		glBindVertexArray(0);
+
+		cout << "update:" << i << endl;
+	}
+
+	
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -253,22 +291,43 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// 绘制行星
-		shader.user();
+		
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.GetViewMatrix();;
 		glm::mat4 model;
 		model = glm::translate(model, glm::vec3(0.0f, -3.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-		shader.setMat4("model", model);
-		planet.Draw(shader);
+
+
+		planetShader.user();
+
+		planetShader.setMat4("model", model);
+		planetShader.setMat4("projection", projection);
+		planetShader.setMat4("view", view);
+
+		planet.Draw(planetShader);
+
+
+		//shader.setMat4("model", model);
+		//planet.Draw(shader);
 
 		// 绘制小行星
-		for (unsigned int i = 0; i < amount; i++)
+		// for (unsigned int i = 0; i < amount; i++)
+		// {
+		// 	//shader.setMat4("model", modelMatrices[i]);
+		// 	rock.Draw(shader);
+		// }
+
+		rockShader.user();
+
+		rockShader.setMat4("projection", projection);
+		rockShader.setMat4("view", view);
+
+		for(unsigned int i = 0; i < rock.meshes.size(); ++i)
 		{
-			shader.setMat4("model", modelMatrices[i]);
-			rock.Draw(shader);
+			glBindVertexArray(rock.meshes[i].VAO);
+
+			glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
 		}
 
 
