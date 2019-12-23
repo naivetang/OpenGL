@@ -148,6 +148,8 @@ int main()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)) );
 	glEnableVertexAttribArray(1);
 
+	
+
 	vec2 offsets[100];
 
 	int index = 0;
@@ -168,19 +170,40 @@ int main()
 		}
 	}
 
-
 	Shader InstanceShader("InstanceVShader.glsl", "InstanceFShader.glsl");
 
 	InstanceShader.user();
 
-	for (unsigned int i = 0; i < 100; i++)
-	{
-		stringstream ss;
-		string index;
-		ss << i;
-		index = ss.str();
-		InstanceShader.setVec2(("offect[" + index + "]").c_str(), offsets[i]);
-	}
+	// for (unsigned int i = 0; i < 100; i++)
+	// {
+	// 	stringstream ss;
+	// 	string index;
+	// 	ss << i;
+	// 	index = ss.str();
+	// 	InstanceShader.setVec2(("offect[" + index + "]").c_str(), offsets[i]);
+	// }
+
+
+	unsigned int instanceVBO;
+	glGenBuffers(1, &instanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec2) * 100, &offsets[0], GL_STATIC_DRAW);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(2);
+
+	/*这个函数告诉了OpenGL该什么时候更新顶点属性的内容至新一组数据。
+	 *它的第一个参数是需要的顶点属性，第二个参数是属性除数(Attribute Divisor)。
+	 *默认情况下，属性除数是0，告诉OpenGL我们需要在顶点着色器的每次迭代时更新顶点属性。
+	 *将它设置为1时，我们告诉OpenGL我们希望在渲染一个新实例的时候更新顶点属性。
+	 *而设置为2时，我们希望每2个实例更新一次属性，
+	 *以此类推。我们将属性除数设置为1，是在告诉OpenGL，处于位置值2的顶点属性是一个实例化数组。*/
+	glVertexAttribDivisor(2, 1);
+
+
+	
+
+
 
 
 	while (!glfwWindowShouldClose(window))
