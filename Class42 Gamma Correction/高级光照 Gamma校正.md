@@ -1,0 +1,5 @@
+- 显示器上的显示亮度跟理论亮度不一致，对于同一个RGB值，不同显示器会有一些偏差。
+- sRGB环境就是带了gamma矫正的环境，比如美术在电脑上绘画。这样环境输出的资源不需要再进行Gamma矫正。
+- 非sRGB环境，即线性环境的资源，在屏幕上显示需要做gamma矫正，否则普遍会偏暗，原本暗的地方偏暗程度会更高。
+- 一般Gamma值为2.2。矫正方式在片段着色器后处理，rgb = pow(rgb, 1/2.2)，这样所有像素会偏亮。在屏幕上显示显示的结果rgb的2.2次幂，就会趋近线性正常。
+- 真实物理世界，光照强度和距离的平方成反比  float attenuation = 1.0 / (distance * distance)，在不处理gamma偏差的情况下，双曲线函数更符合: float attenuation = 1.0 / distance，因为gamma偏差后：pow(rgb * attenuation, 2.2) = pow(rgb,2.2) * 1.0/pow(distance,2.2)
